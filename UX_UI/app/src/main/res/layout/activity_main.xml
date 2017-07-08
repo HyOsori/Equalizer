@@ -11,13 +11,14 @@
         android:layout_width="0dp"
         android:layout_height="235dp"
         android:id="@+id/spinnerLayout"
-        tools:layout_editor_absoluteY="24dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="16dp">
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:text="Button"
