@@ -3,18 +3,31 @@ package com.uxui.equalizer.hyosori.ux_ui;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
     private ConstraintLayout seekBars;
+    private ListView menu;
+    static final String[] LIST_MENU = {"Add", "Community"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU) ;
+
+        menu = (ListView) findViewById(R.id.menuListView) ;
+        menu.setAdapter(adapter);
+
+        menu.setVisibility(View.GONE);
 
         seekBars = (ConstraintLayout) findViewById(R.id.seekBarLayout);
 
@@ -62,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        ImageButton moreMenuBtn = (ImageButton) findViewById(R.id.moreMenuBtn);
+        moreMenuBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menu.setVisibility(View.VISIBLE);
             }
         });
     }
