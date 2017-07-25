@@ -1,5 +1,6 @@
 package com.uxui.equalizer.hyosori.ux_ui;
 
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+
 
 public class MainActivity extends AppCompatActivity {
     private ConstraintLayout seekBars;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_new) {
-
+            startActivity(new Intent(MainActivity.this, SubActivity.class));
             return true;
         }
 
