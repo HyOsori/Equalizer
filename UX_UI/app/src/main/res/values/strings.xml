@@ -9,4 +9,7 @@
     <string name="frequency3">910Hz</string>
     <string name="frequency4">3.6kHz</string>
     <string name="frequency5">14kHz</string>
+
+    <string name="action_new">New Earphone</string>
+    <string name="action_community">Community</string>
 </resources>

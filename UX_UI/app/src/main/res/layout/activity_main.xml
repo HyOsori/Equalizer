@@ -18,30 +18,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_bias="0.0">
 
-        <ImageButton
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:layout_width="368dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_more_vert_white_24dp"
-            android:id="@+id/moreMenuBtn"
-            android:visibility="visible"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
-
-        <TextView
-            android:text="@string/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:textAppearance="@style/ActionBarTitleFont"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp" />
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            tools:layout_editor_absoluteY="63dp"
+            tools:layout_editor_absoluteX="8dp"
+            android:id="@+id/toolbar"
+            tools:ignore="MissingConstraints" />
 
     </android.support.constraint.ConstraintLayout>
 
