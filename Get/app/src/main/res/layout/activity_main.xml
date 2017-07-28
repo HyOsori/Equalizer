@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,69 +8,107 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="horizontal"
+    android:columnCount="4"
+    android:rowCount="5"
     tools:context="sjnov11_equalizing.equalizer.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
 
     <Button
-        android:text="정지"
+        android:text="300HZ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnStopPlay"
-        android:onClick="onClick"
-        android:layout_alignTop="@+id/btnPlay"
-        android:layout_toEndOf="@+id/btnPlay"
-        android:layout_marginStart="33dp" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnRecord"
-        android:layout_alignEnd="@+id/btnStopPlay"
-        android:id="@+id/btnStopRecord"
+        android:id="@+id/btn300Hz"
         android:onClick="onClick" />
 
     <Button
-        android:text="녹음"
+        android:text="600Hz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:id="@+id/btnRecord"
-        android:onClick="onClick"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/btn600Hz"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:onClick="onClick" />
 
     <Button
-        android:text="재생"
+        android:text="1KHz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:id="@+id/btnPlay"
-        android:onClick="onClick"
-        android:layout_below="@+id/btnRecord"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="85dp"
-        android:id="@+id/btnMax"
-        android:onClick="onClick"
-        android:layout_below="@+id/btnPlay"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/btn1KHz"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:onClick="onClick" />
 
     <TextView
-        android:text="TextView"
+        android:text="300평균"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnPlay"
-        android:layout_toStartOf="@+id/btnStopPlay"
-        android:layout_marginTop="43dp"
-        android:id="@+id/textViewDecibelNumber" />
-</RelativeLayout>
+        android:id="@+id/tv300HzAverage"
+        android:layout_row="0"
+        android:layout_column="3" />
+
+    <TextView
+        android:text="1k평균"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv1kHzAverage"
+        android:layout_row="2"
+        android:layout_column="3" />
+
+    <Button
+        android:text="2Khz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn2KHz"
+        android:onClick="onClick" />
+
+    <TextView
+        android:text="2k평균"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv2kHzAverage"
+        android:layout_row="3"
+        android:layout_column="3" />
+
+    <TextView
+        android:text="600측정치"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv600HzAmplitude"
+        android:layout_row="1"
+        android:layout_column="2" />
+
+    <TextView
+        android:text="300측정치"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv300HzAmplitude"
+        android:layout_row="0"
+        android:layout_column="2" />
+
+    <TextView
+        android:text="1k측정치"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv1kHzAmplitude"
+        android:layout_row="2"
+        android:layout_column="2" />
+
+    <TextView
+        android:text="2k측정치"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv2kHzAmplitude"
+        android:layout_row="3"
+        android:layout_column="2" />
+
+    <TextView
+        android:text="600평균"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv600HzAverage"
+        android:layout_row="1"
+        android:layout_column="3" />
+
+
+</GridLayout>
