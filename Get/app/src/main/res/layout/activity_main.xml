@@ -15,100 +15,117 @@
 
 
     <Button
-        android:text="300HZ"
+        android:text="60hz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn300Hz"
+        android:id="@+id/btn60hz"
         android:onClick="onClick" />
 
     <Button
-        android:text="600Hz"
+        android:text="910hz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn600Hz"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:onClick="onClick" />
-
-    <Button
-        android:text="1KHz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn1KHz"
+        android:id="@+id/btn910hz"
         android:layout_row="2"
         android:layout_column="0"
         android:onClick="onClick" />
 
     <TextView
-        android:text="300평균"
+        android:text="60평균"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv300HzAverage"
+        android:id="@+id/tv60hzAverage"
         android:layout_row="0"
         android:layout_column="3" />
 
     <TextView
-        android:text="1k평균"
+        android:text="910평균"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv1kHzAverage"
+        android:id="@+id/tv910hzAverage"
         android:layout_row="2"
         android:layout_column="3" />
 
     <Button
-        android:text="2Khz"
+        android:text="3600hz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn2KHz"
+        android:id="@+id/btn3600hz"
         android:onClick="onClick" />
 
     <TextView
-        android:text="2k평균"
+        android:text="230측정"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv2kHzAverage"
-        android:layout_row="3"
-        android:layout_column="3" />
-
-    <TextView
-        android:text="600측정치"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv600HzAmplitude"
+        android:id="@+id/tv230hzAmp"
         android:layout_row="1"
         android:layout_column="2" />
 
     <TextView
-        android:text="300측정치"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv300HzAmplitude"
+        android:id="@+id/tv60hzAmp"
         android:layout_row="0"
-        android:layout_column="2" />
+        android:layout_column="2"
+        android:text="60측정" />
 
     <TextView
-        android:text="1k측정치"
+        android:text="910측정"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv1kHzAmplitude"
+        android:id="@+id/tv910hzAmp"
         android:layout_row="2"
         android:layout_column="2" />
 
     <TextView
-        android:text="2k측정치"
+        android:text="3600측정"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv2kHzAmplitude"
+        android:id="@+id/tv3600hzAmp"
         android:layout_row="3"
         android:layout_column="2" />
 
     <TextView
-        android:text="600평균"
+        android:text="230평균"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv600HzAverage"
+        android:id="@+id/tv230hzAverage"
         android:layout_row="1"
         android:layout_column="3" />
+
+    <Button
+        android:text="230hz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn230hz"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:onClick="onClick" />
+
+    <TextView
+        android:text="3600평균"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv3600hzAverage"
+        android:layout_row="3"
+        android:layout_column="3" />
+
+    <Button
+        android:text="저장"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSave"
+        android:onClick="onClick" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etDevice"
+        android:layout_row="4"
+        android:layout_column="2"
+        tools:text="디바이스" />
 
 
 </GridLayout>

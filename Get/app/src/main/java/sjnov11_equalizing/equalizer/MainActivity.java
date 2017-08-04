@@ -9,9 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.*;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,29 +25,28 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     static final String RECORDED_FILE = "/sdcard/recorded.mp4";
-    MediaRecorder recorder = null;
+    static final String DEVICE_DATA = "/sdcard/device_data.json";
+
+    MediaRecorder recorder = null;          // To get max amplitude
+    AudioTrack audioTrack = null;           // To play particular frequency audio
 
     private final int MEASURING = 10;
     private final int NOISE = 2;
 
-    // Frequency Tone Generator
-    private final int duration = 100; // seconds (not correct, so give enough time)
-    private final int sampleRate = 8000;
+    // Frequency Tone Generator variable
+    private final int duration = 30; // seconds (not correct, so give enough time)
+    private final int sampleRate = 48000;
     private final int numSamples = duration * sampleRate;
     private final double sample[] = new double[numSamples];
-    // private final double freqOfTone = 500; // hz
     private final byte generatedSnd[] = new byte[2 * numSamples];
-    private final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-            sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-            AudioFormat.ENCODING_PCM_16BIT, numSamples,
-            AudioTrack.MODE_STATIC);    // particular frequency audio
 
     private Timer _timer;
-    private Runnable _runnable;
+    private Runnable _stopRecord;
     private Handler _handler;
-    Handler testhandler = new Handler();
+
 
     private final ArrayList<Integer> amplitudes = new ArrayList<Integer>();
+    private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
 
 
@@ -52,12 +57,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         /*
-        Button btnRecord = (Button)findViewById(R.id.btnRecord);
-        Button btnStopRecord = (Button)findViewById(R.id.btnStopRecord);
-        Button btnPlay = (Button)findViewById(R.id.btnPlay);
-        Button btnStopPlay = (Button)findViewById(R.id.btnStopPlay);
+        // Measured Amplitude
+        TextView tv60hzAmp = (TextView)findViewById(R.id.tv60hzAmp);
+        TextView tv230hzAmp = (TextView)findViewById(R.id.tv230hzAmp);
+        TextView tv910hzAmp = (TextView)findViewById(R.id.tv910hzAmp);
+        TextView tv3600hzAmp = (TextView)findViewById(R.id.tv3600hzAmp);
+
+        // Average Amplitude
+        TextView tv60hzAverage = (TextView)findViewById(R.id.tv60hzAverage);
+        TextView tv230hzAverage = (TextView)findViewById(R.id.tv230hzAverage);
+        TextView tv910hzAverage = (TextView)findViewById(R.id.tv910hzAverage);
+        TextView tv3600hzAverage = (TextView)findViewById(R.id.tv3600hzAverage);
+
+        // Buttons
+        Button btn60hz = (Button)findViewById(R.id.btn60hz);
+        Button btn230hz = (Button)findViewById(R.id.btn230hz);
+        Button btn910hz = (Button)findViewById(R.id.btn910hz);
+        Button btn3600hz = (Button)findViewById(R.id.btn3600hz);
         */
+
     }
 
 
@@ -73,18 +93,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    /*
-    private void killMediaPlayer() {
-        if(player != null) {
-            try {
-                player.release();
-            } catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-    */
-
     private void killMediaRecorder() {
         if(recorder != null) {
             try {
@@ -94,65 +102,59 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    /*
-    private void playAudio(String url) throws Exception {
-        killMediaPlayer();
-
-        player = new MediaPlayer();
-        player.setDataSource(url);
-        player.prepare();;
-        player.start();
-    }
-
-
-    private void stopAudio() {
-        if(player != null) {
-            playbackPosition = player.getCurrentPosition();
-            player.pause();
-        }
-    }
-    */
-
-
 
 
     public void onClick(View v) {
-        switch ((v.getId())){
-            case R.id.btn300Hz:
-                record(300);
+        switch (v.getId()){
+            case R.id.btn60hz:
+                record(60);
                 break;
-            case R.id.btn600Hz:
-                record(600);
+            case R.id.btn230hz:
+                record(230);
                 break;
-            case R.id.btn1KHz:
-                record(1000);
+            case R.id.btn910hz:
+                record(910);
                 break;
-            case R.id.btn2KHz:
-                record(2000);
+            case R.id.btn3600hz:
+                record(3600);
                 break;
 
-            /*
-            case R.id.btnStopRecord:
-                stopRecord();
+            case R.id.btnSave:
+                saveDeviceData();
                 break;
-            case R.id.btnPlay:
-                filePlay();
-                break;
-            case R.id.btnStopPlay:
-                fileStop();
-                break;
-             */
-            //case R.id.btnMax:
-                //playFreq();
-                // Toast.makeText(getApplicationContext(), "Max : " + recorder.getMaxAmplitude(), Toast.LENGTH_LONG).show();
-
         }
 
     }
 
+    public void saveDeviceData() {
+        EditText editText = (EditText)findViewById(R.id.etDevice);
+        String device = editText.getText().toString();
+        JSONObject obj = new JSONObject();
+        JSONArray list = new JSONArray();
+        try {
+            obj.put("device", device);
+            list.put(averages[0]);
+            list.put(averages[1]);
+            list.put(averages[2]);
+            list.put(averages[3]);
+            obj.put("frequency", list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        Log.e("Result", obj.toString());
+        try {
+            FileWriter file = new FileWriter(DEVICE_DATA);
+            file.write(obj.toString());
+            file.flush();
+            file.close();
 
-    // 측정
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Record amplitude of frequency
     public void record(int freq) {
         if(recorder != null) {
             recorder.stop();
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         recorder = new MediaRecorder();
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setOutputFile(RECORDED_FILE);
@@ -176,56 +178,7 @@ public class MainActivity extends AppCompatActivity {
             recorder.prepare();
             recorder.start();
 
-            // 녹음 종료
-            _runnable = new Runnable() {
-                @Override
-                public void run() {
-                    if(recorder == null) {
-                        return;
-                    }
-                    _timer.cancel();
-                    audioTrack.stop();
-                    recorder.stop();
-                    recorder.release();
-                    recorder = null;
-                    Toast.makeText(getApplicationContext(),
-                            "Stop Recording", Toast.LENGTH_LONG).show();
-
-                    // Average Amplitudes
-                    // Except index 0, 1 noising part for accuracy
-                    for(int i = NOISE; i < amplitudes.size(); i ++){
-                        Log.d("arraylist", "result : " + amplitudes.get(i));
-                        sum_amplitude += amplitudes.get(i);
-                    }
-                    switch (freqOfTone){
-                        case 300:
-                            ((TextView) findViewById(R.id.tv300HzAverage)).setText(String.valueOf(sum_amplitude / (MEASURING - NOISE - 1)));
-                            sum_amplitude = 0;
-                            amplitudes.clear();
-                            break;
-                        case 600:
-                            ((TextView) findViewById(R.id.tv600HzAverage)).setText(String.valueOf(sum_amplitude / (MEASURING - NOISE - 1)));
-                            sum_amplitude = 0;
-                            amplitudes.clear();
-                            break;
-                        case 1000:
-                            ((TextView) findViewById(R.id.tv1kHzAverage)).setText(String.valueOf(sum_amplitude / (MEASURING - NOISE - 1)));
-                            sum_amplitude = 0;
-                            amplitudes.clear();
-                            break;
-                        case 2000:
-                            ((TextView) findViewById(R.id.tv2kHzAverage)).setText(String.valueOf(sum_amplitude / (MEASURING - NOISE - 1)));
-                            sum_amplitude = 0;
-                            amplitudes.clear();
-                            break;
-                    }
-                }
-
-            };
-
-            // 1초마다 Max Amplitude 측정
-            //recorder.getMaxAmplitude(); // Initialize
-
+            // Record max amplitudes per second
             _timer = new Timer();
             _timer.schedule(new TimerTask() {
                 @Override
@@ -237,20 +190,20 @@ public class MainActivity extends AppCompatActivity {
                                 return;
                             int current_amplitude = recorder.getMaxAmplitude();
                             switch (freqOfTone){
-                                case 300:
-                                    ((TextView) findViewById(R.id.tv300HzAmplitude)).setText(String.valueOf(current_amplitude));
+                                case 60:
+                                    ((TextView) findViewById(R.id.tv60hzAmp)).setText(String.valueOf(current_amplitude));
                                     amplitudes.add(current_amplitude);
                                     break;
-                                case 600:
-                                    ((TextView) findViewById(R.id.tv600HzAmplitude)).setText(String.valueOf(current_amplitude));
+                                case 230:
+                                    ((TextView) findViewById(R.id.tv230hzAmp)).setText(String.valueOf(current_amplitude));
                                     amplitudes.add(current_amplitude);
                                     break;
-                                case 1000:
-                                    ((TextView) findViewById(R.id.tv1kHzAmplitude)).setText(String.valueOf(current_amplitude));
+                                case 910:
+                                    ((TextView) findViewById(R.id.tv910hzAmp)).setText(String.valueOf(current_amplitude));
                                     amplitudes.add(current_amplitude);
                                     break;
-                                case 2000:
-                                    ((TextView) findViewById(R.id.tv2kHzAmplitude)).setText(String.valueOf(current_amplitude));
+                                case 3600:
+                                    ((TextView) findViewById(R.id.tv3600hzAmp)).setText(String.valueOf(current_amplitude));
                                     amplitudes.add(current_amplitude);
                                     break;
                             }
@@ -260,22 +213,77 @@ public class MainActivity extends AppCompatActivity {
                 }
             },1000,1000);
 
+            _stopRecord = new Runnable() {
+                @Override
+                public void run() {
+
+                    _timer.cancel();
+                    stopFreq();
+                    if(recorder != null) {
+                        recorder.stop();
+                        recorder.release();
+                        recorder = null;
+                    }
+
+                    Toast.makeText(getApplicationContext(),
+                            "Stop Recording", Toast.LENGTH_LONG).show();
+
+                    // Average Amplitudes
+                    // Except index 0, 1 noising part for accuracy
+                    for(int i = NOISE; i < amplitudes.size(); i ++){
+                        Log.d("arraylist", "result : " + amplitudes.get(i));
+                        sum_amplitude += amplitudes.get(i);
+                    }
+
+                    int average;
+                    switch (freqOfTone){
+                        case 60:
+                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            averages[0] = average;
+                            ((TextView) findViewById(R.id.tv60hzAverage)).setText(String.valueOf(average));
+                            sum_amplitude = 0;
+                            amplitudes.clear();
+                            break;
+                        case 230:
+                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            averages[1] = average;
+                            ((TextView) findViewById(R.id.tv230hzAverage)).setText(String.valueOf(average));
+                            sum_amplitude = 0;
+                            amplitudes.clear();
+                            break;
+                        case 910:
+                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            averages[2] = average;
+                            ((TextView) findViewById(R.id.tv910hzAverage)).setText(String.valueOf(average));
+                            sum_amplitude = 0;
+                            amplitudes.clear();
+                            break;
+                        case 3600:
+                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            averages[3] = average;
+                            ((TextView) findViewById(R.id.tv3600hzAverage)).setText(String.valueOf(average));
+                            sum_amplitude = 0;
+                            amplitudes.clear();
+                            break;
+                    }
+                }
+            };
 
             _handler = new Handler();
-            _handler.postDelayed(_runnable, MEASURING * 1000);
+            _handler.postDelayed(_stopRecord, MEASURING * 1000);        // 1000ms : 1sec
 
             switch (freqOfTone){
-                case 300:
-                    playFreq(300);
+                case 60:
+                    playFreq(60);
                     break;
-                case 600:
-                    playFreq(600);
+                case 230:
+                    playFreq(230);
                     break;
-                case 1000:
-                    playFreq(1000);
+                case 910:
+                    playFreq(910);
                     break;
-                case 2000:
-                    playFreq(2000);
+                case 3600:
+                    playFreq(3600);
                     break;
             }
 
@@ -285,48 +293,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    public void stopRecord() {
-        if(recorder == null) {
-            return;
-        }
-        recorder.stop();
-        //Toast.makeText(getApplicationContext(), "Max : " + recorder.getMaxAmplitude(), Toast.LENGTH_LONG).show();
-        recorder.release();
-
-        recorder = null;
-        _timer.cancel();
-
-        Toast.makeText(getApplicationContext(),
-                "Stop Recording", Toast.LENGTH_LONG).show();
-    }
-
-
-    public void filePlay() {
-        try {
-            playAudio(RECORDED_FILE);
-            Toast.makeText(getApplicationContext(), "Play now", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void fileStop() {
-        try {
-            stopAudio();
-            Toast.makeText(getApplicationContext(), "Stop playing", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    */
 
     void genTone(int freq){
         // fill out the array
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freq));
         }
-
+        Log.e("fuck:", "genTone: sample i: " + 1 + " = sample[i]" + sample[1]);
+        Log.e("fuck:", "genTone: Gen Done");
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
         int idx = 0;
@@ -343,10 +317,25 @@ public class MainActivity extends AppCompatActivity {
     void playFreq(int freq){
         genTone(freq);
 
+        if(audioTrack != null) {
+            audioTrack.stop();
+            audioTrack.release();
+            audioTrack = null;
+        }
+
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_16BIT, numSamples,
+                AudioTrack.MODE_STATIC);
+
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
         audioTrack.play();
+    }
 
+    void stopFreq() {
+        audioTrack.stop();
     }
 
 
 }
+
