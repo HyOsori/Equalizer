@@ -1,9 +1,12 @@
-package com.equalizer.hyosori.equalizer;
+package com.equalizer.hyosori.equalizer.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SetterActivity extends AppCompatActivity {
+import com.equalizer.hyosori.equalizer.R;
+
+
+public class SetterActivity extends AppCompatActivity implements SetterView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
