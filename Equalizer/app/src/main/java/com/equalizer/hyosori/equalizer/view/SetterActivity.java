@@ -13,22 +13,32 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.equalizer.hyosori.equalizer.R;
+import com.equalizer.hyosori.equalizer.presenter.SetterPresenter;
 
 
 public class SetterActivity extends AppCompatActivity implements SetterView {
+
+    private Toolbar toolbar;
     private ConstraintLayout seekBars;
+    private Button applyBtn;
+    private Spinner baseSpinner;
+    private Spinner targetSpinner;
+
+    SetterPresenter presenter = new SetterPresenter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        applyBtn = (Button) findViewById(R.id.btn_apply);
+        seekBars = (ConstraintLayout) findViewById(R.id.seekBarLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        baseSpinner = (Spinner) findViewById(R.id.spinner1);
+        targetSpinner = (Spinner) findViewById(R.id.spinner2);
+
         setSupportActionBar(toolbar);
 
-        seekBars = (ConstraintLayout) findViewById(R.id.seekBarLayout);
-
-        Button applyBtn = (Button) findViewById(R.id.btn_apply);
         applyBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,10 +50,7 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
             }
         });
 
-        Spinner spinner1 = (Spinner) findViewById(R.id.spinner1);
-        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
-
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        baseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final int childCount = seekBars.getChildCount();
@@ -54,12 +61,10 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        targetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final int childCount = seekBars.getChildCount();
@@ -70,10 +75,28 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        presenter.onCreate();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override
