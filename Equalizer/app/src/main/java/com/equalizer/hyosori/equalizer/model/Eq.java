@@ -1,5 +1,5 @@
 package com.equalizer.hyosori.equalizer.model;
 
 
-public class Equalizer {
+public class Eq {
 }
