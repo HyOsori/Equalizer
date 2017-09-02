@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             mEqualizer = null;
-            mEqualizer = new Equalizer(0, 0 );
+            mEqualizer = new Equalizer(0, sessionId );
             mEqualizer.setEnabled(true);
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
