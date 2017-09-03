@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     MediaRecorder recorder = null;          // To get max amplitude
     AudioTrack audioTrack = null;           // To play particular frequency audio
 
-    private final int MEASURING = 6;
-    private final int NOISE = 2;
+    private final int MEASURING = 7;
+    private final int NOISE = 3;
 
     // Frequency Tone Generator variable
     private final int duration = 30; // seconds (not correct, so give enough time)
@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private final ArrayList<Integer> amplitudes3 = new ArrayList<Integer>();
     private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
-
+    private int freqOfTone;
+    private int cnt = 0;
 
     //Handler handler = new Handler();
 
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        _equalizer = new Equalizer(0, 0);
+
 
         /*
         // Measured Amplitude
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
+        cnt = 0;
         switch (v.getId()){
             case R.id.btn60hz:
                 record(60);
@@ -161,9 +165,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void initBandLevel() {
+        _equalizer.setBandLevel((short)0, (short)(0));
+        _equalizer.setBandLevel((short)1, (short)(0));
+        _equalizer.setBandLevel((short)2, (short)(0));
+        _equalizer.setBandLevel((short)3, (short)(0));
+        _equalizer.setBandLevel((short)4, (short)(0));
+    }
+
+
     // Make TimerTask which evaluates max amplitudes for MEASURE seconds.
     public void setTimerTask (int freq) {
-        final int freqOfTone = freq;
 
         _timerTask = new TimerTask() {
             @Override
@@ -171,10 +183,8 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.e("_timertask Thread :" , "run");
-
                         int current_amplitude = recorder.getMaxAmplitude();
-                        Log.e("AMP: ", "current_amp: " + current_amplitude);
+
                         switch (freqOfTone){
                             case 60:
                                 ((TextView) findViewById(R.id.tv60hzAmp)).setText(String.valueOf(current_amplitude));
@@ -215,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setOutputFile(RECORDED_FILE);
 
-        final int freqOfTone = freq;
+        freqOfTone = freq;
 
 
         try {
@@ -233,21 +243,47 @@ public class MainActivity extends AppCompatActivity {
                         _timer.cancel();
                         _timer = null;
                     }
+                    cnt ++;
                     setTimerTask(freqOfTone);
                     _timer = new Timer();
                     _timer.schedule(_timerTask, 1000, 1000);
 
+                    initBandLevel();
                     switch (freqOfTone){
                         case 60:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 0, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 0, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 0, (short) (1500));
                             playFreq(60);
                             break;
                         case 230:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 1, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 1, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 1, (short) (1500));
                             playFreq(230);
                             break;
                         case 910:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 2, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 2, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 2, (short) (1500));
                             playFreq(910);
                             break;
                         case 3600:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 3, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 3, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 3, (short) (1500));
                             playFreq(3600);
                             break;
                     }
@@ -276,13 +312,13 @@ public class MainActivity extends AppCompatActivity {
                     */
 
                     for(int i = 0; i < amplitudes.size(); i ++){
-                        Log.e("full arraylist", "value (" + i + ") :" + amplitudes.get(i));
+                        Log.d("full arraylist", "value (" + i + ") :" + amplitudes.get(i));
                     }
 
                     // Average Amplitudes
                     // Except index 0, 1 noising part for accuracy
                     for(int i = NOISE; i < amplitudes.size(); i ++){
-                        Log.e("arraylist", "result : " + amplitudes.get(i));
+                        Log.d("arraylist", "result : " + amplitudes.get(i));
                         sum_amplitude += amplitudes.get(i);
                     }
 
@@ -291,28 +327,48 @@ public class MainActivity extends AppCompatActivity {
                         case 60:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[0] = average;
-                            ((TextView) findViewById(R.id.tv60hzAverage1)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv60hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv60hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv60hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 230:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[1] = average;
-                            ((TextView) findViewById(R.id.tv230hzAverage1)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv230hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv230hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv230hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 910:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[2] = average;
-                            ((TextView) findViewById(R.id.tv910hzAverage1)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv910hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv910hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv910hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 3600:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[3] = average;
-                            ((TextView) findViewById(R.id.tv3600hzAverage1)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv3600hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv3600hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv3600hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
@@ -331,8 +387,10 @@ public class MainActivity extends AppCompatActivity {
             _handler = new Handler();
             _handler.post(_startRecord);
             _handler.postDelayed(_stopRecord, MEASURING * 1000);        // 1000ms : 1sec
-            _handler.postDelayed(_startRecord, (MEASURING + 2) * 1000);
-            _handler.postDelayed(_stopRecord, (MEASURING + 2) * 1000 + MEASURING * 1000);
+            _handler.postDelayed(_startRecord, (MEASURING + 1) * 1000);
+            _handler.postDelayed(_stopRecord, (MEASURING * 2 + 1) * 1000);
+            _handler.postDelayed(_startRecord, (MEASURING * 2 + 2) * 1000);
+            _handler.postDelayed(_stopRecord, (MEASURING * 3 + 2) * 1000);
 
 
 /*
@@ -363,8 +421,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freq));
         }
-        Log.e("fuck:", "genTone: sample i: " + 1 + " = sample[i]" + sample[1]);
-        Log.e("fuck:", "genTone: Gen Done");
+
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
         int idx = 0;
