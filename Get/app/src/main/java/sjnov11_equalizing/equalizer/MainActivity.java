@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private Equalizer _equalizer;
 
     private final ArrayList<Integer> amplitudes = new ArrayList<Integer>();
+    private final ArrayList<Integer> amplitudes2 = new ArrayList<Integer>();
+    private final ArrayList<Integer> amplitudes3 = new ArrayList<Integer>();
     private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
 
@@ -169,9 +171,10 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(recorder == null)
-                            return;
+                        Log.e("_timertask Thread :" , "run");
+
                         int current_amplitude = recorder.getMaxAmplitude();
+                        Log.e("AMP: ", "current_amp: " + current_amplitude);
                         switch (freqOfTone){
                             case 60:
                                 ((TextView) findViewById(R.id.tv60hzAmp)).setText(String.valueOf(current_amplitude));
@@ -216,8 +219,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         try {
-            Toast.makeText(getApplicationContext(), "Start Recording", Toast.LENGTH_LONG).show();
-
             recorder.prepare();
             recorder.start();
 
@@ -227,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     Toast.makeText(getApplicationContext(),
                             "Start Recording", Toast.LENGTH_SHORT).show();
+
                     if(_timer != null) {
                         _timer.cancel();
                         _timer = null;
@@ -234,23 +236,44 @@ public class MainActivity extends AppCompatActivity {
                     setTimerTask(freqOfTone);
                     _timer = new Timer();
                     _timer.schedule(_timerTask, 1000, 1000);
+
+                    switch (freqOfTone){
+                        case 60:
+                            playFreq(60);
+                            break;
+                        case 230:
+                            playFreq(230);
+                            break;
+                        case 910:
+                            playFreq(910);
+                            break;
+                        case 3600:
+                            playFreq(3600);
+                            break;
+                    }
+
                 }
             };
 
             _stopRecord = new Runnable() {
                 @Override
                 public void run() {
+                    Toast.makeText(getApplicationContext(),
+                            "Stop Recording", Toast.LENGTH_SHORT).show();
+
+                    if(_timer != null) {
+                        _timer.cancel();
+                        _timer = null;
+                    }
+
                     stopFreq();
+                    /*
                     if(recorder != null) {
                         recorder.stop();
                         recorder.release();
                         recorder = null;
                     }
-                    
-
-                    Toast.makeText(getApplicationContext(),
-                            "Stop Recording", Toast.LENGTH_LONG).show();
-
+                    */
 
                     for(int i = 0; i < amplitudes.size(); i ++){
                         Log.e("full arraylist", "value (" + i + ") :" + amplitudes.get(i));
@@ -268,28 +291,28 @@ public class MainActivity extends AppCompatActivity {
                         case 60:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[0] = average;
-                            ((TextView) findViewById(R.id.tv60hzAverage)).setText(String.valueOf(average));
+                            ((TextView) findViewById(R.id.tv60hzAverage1)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 230:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[1] = average;
-                            ((TextView) findViewById(R.id.tv230hzAverage)).setText(String.valueOf(average));
+                            ((TextView) findViewById(R.id.tv230hzAverage1)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 910:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[2] = average;
-                            ((TextView) findViewById(R.id.tv910hzAverage)).setText(String.valueOf(average));
+                            ((TextView) findViewById(R.id.tv910hzAverage1)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 3600:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[3] = average;
-                            ((TextView) findViewById(R.id.tv3600hzAverage)).setText(String.valueOf(average));
+                            ((TextView) findViewById(R.id.tv3600hzAverage1)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
@@ -297,20 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-            switch (freqOfTone){
-                case 60:
-                    playFreq(60);
-                    break;
-                case 230:
-                    playFreq(230);
-                    break;
-                case 910:
-                    playFreq(910);
-                    break;
-                case 3600:
-                    playFreq(3600);
-                    break;
-            }
+
 /*
             // Record max amplitudes per second
             _timer = new Timer();
@@ -321,8 +331,8 @@ public class MainActivity extends AppCompatActivity {
             _handler = new Handler();
             _handler.post(_startRecord);
             _handler.postDelayed(_stopRecord, MEASURING * 1000);        // 1000ms : 1sec
-            _handler.postDelayed(_startRecord, (MEASURING + 1) * 1000);
-            _handler.postDelayed(_stopRecord, (MEASURING + 1) * 1000 + MEASURING * 1000);
+            _handler.postDelayed(_startRecord, (MEASURING + 2) * 1000);
+            _handler.postDelayed(_stopRecord, (MEASURING + 2) * 1000 + MEASURING * 1000);
 
 
 /*
