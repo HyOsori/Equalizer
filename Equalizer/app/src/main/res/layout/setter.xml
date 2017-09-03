@@ -110,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_apply"
+                android:onClick="onApplyBtnClicked"
                 tools:layout_constraintRight_creator="1"
                 tools:layout_constraintBottom_creator="1"
                 tools:layout_constraintLeft_creator="1"
@@ -132,7 +133,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/spinnerLayout"
             app:layout_constraintRight_toRightOf="@+id/spinnerLayout"
             app:layout_constraintTop_toBottomOf="@+id/spinnerLayout"
-            android:id="@+id/seekBarLayout">
+            android:id="@+id/detailSettingLayout">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,6 +186,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar4"
+                android:tag="@string/frequency4"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -199,6 +201,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar5"
+                android:tag="@string/frequency5"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -212,6 +215,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar3"
+                android:tag="@string/frequency3"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -226,6 +230,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar2"
+                android:tag="@string/frequency2"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -239,6 +244,7 @@
             <SeekBar
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar1"
+                android:tag="@string/frequency1"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"

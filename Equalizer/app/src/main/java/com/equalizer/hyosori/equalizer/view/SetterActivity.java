@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.equalizer.hyosori.equalizer.R;
@@ -19,10 +19,16 @@ import com.equalizer.hyosori.equalizer.presenter.SetterPresenter;
 public class SetterActivity extends AppCompatActivity implements SetterView {
 
     private Toolbar toolbar;
-    private ConstraintLayout seekBars;
-    private Button applyBtn;
+    private ConstraintLayout detailSettingLayout;
+
     private Spinner baseSpinner;
     private Spinner targetSpinner;
+
+    private SeekBar seekBar60;
+    private SeekBar seekBar230;
+    private SeekBar seekBar910;
+    private SeekBar seekBar3600;
+    private SeekBar seekBar14000;
 
     SetterPresenter presenter = new SetterPresenter(this);
 
@@ -31,31 +37,25 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setter);
 
-        applyBtn = (Button) findViewById(R.id.btn_apply);
-        seekBars = (ConstraintLayout) findViewById(R.id.seekBarLayout);
+        detailSettingLayout = (ConstraintLayout) findViewById(R.id.detailSettingLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         baseSpinner = (Spinner) findViewById(R.id.spinner1);
         targetSpinner = (Spinner) findViewById(R.id.spinner2);
 
-        setSupportActionBar(toolbar);
+        seekBar60 = (SeekBar) findViewById(R.id.seekBar1);
+        seekBar230 = (SeekBar) findViewById(R.id.seekBar2);
+        seekBar910 = (SeekBar) findViewById(R.id.seekBar3);
+        seekBar3600 = (SeekBar) findViewById(R.id.seekBar4);
+        seekBar14000 = (SeekBar) findViewById(R.id.seekBar5);
 
-        applyBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final int childCount = seekBars.getChildCount();
-                for (int i = 0; i < childCount; ++i) {
-                    View v = seekBars.getChildAt(i);
-                    v.setEnabled(true);
-                }
-            }
-        });
+        setSupportActionBar(toolbar);
 
         baseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final int childCount = seekBars.getChildCount();
+                final int childCount = detailSettingLayout.getChildCount();
                 for (int i = 0; i < childCount; ++i) {
-                    View v = seekBars.getChildAt(i);
+                    View v = detailSettingLayout.getChildAt(i);
                     v.setEnabled(false);
                 }
             }
@@ -67,9 +67,9 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         targetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final int childCount = seekBars.getChildCount();
+                final int childCount = detailSettingLayout.getChildCount();
                 for (int i = 0; i < childCount; ++i) {
-                    View v = seekBars.getChildAt(i);
+                    View v = detailSettingLayout.getChildAt(i);
                     v.setEnabled(false);
                 }
             }
@@ -79,6 +79,76 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         });
 
         presenter.onCreate();
+
+        seekBar60.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                onSeekBarProgressChanged(seekBar);
+            }
+        });
+
+        seekBar230.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                onSeekBarProgressChanged(seekBar);
+            }
+        });
+
+        seekBar910.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                onSeekBarProgressChanged(seekBar);
+            }
+        });
+
+        seekBar3600.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                onSeekBarProgressChanged(seekBar);
+            }
+        });
+
+        seekBar14000.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                onSeekBarProgressChanged(seekBar);
+            }
+        });
     }
 
     @Override
@@ -119,5 +189,37 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSeekBarProgressChanged(SeekBar seekBar) {
+        String frequency = (String) seekBar.getTag();
+
+        if (frequency.contains("k")) {
+            frequency.replace("kHz", "");
+        } else {
+            frequency.replace("Hz", "");
+        }
+
+        presenter.onSeekBarChanged(Integer.parseInt(frequency), seekBar.getProgress());
+    }
+
+    private void enabledSeekBars() {
+        final int childCount = detailSettingLayout.getChildCount();
+        for (int i = 0; i < childCount; ++i) {
+            View v = detailSettingLayout.getChildAt(i);
+            v.setEnabled(true);
+        }
+    }
+
+    public void onApplyBtnClicked(View v) {
+        String baseName = this.baseSpinner.getSelectedItem().toString();
+        String targetName = this.targetSpinner.getSelectedItem().toString();
+        enabledSeekBars();
+        presenter.onApplyBtnSelected(baseName, targetName);
+    }
+
+    @Override
+    public void setSeekBars(int[] amplitudes) {
+        //preset대로 seekbar를 조절합니다
     }
 }
