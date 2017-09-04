@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private Equalizer _equalizer;
 
     private final ArrayList<Integer> amplitudes = new ArrayList<Integer>();
-    private final ArrayList<Integer> amplitudes2 = new ArrayList<Integer>();
-    private final ArrayList<Integer> amplitudes3 = new ArrayList<Integer>();
+
     private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
     private int freqOfTone;
@@ -387,11 +386,13 @@ public class MainActivity extends AppCompatActivity {
             _handler = new Handler();
             _handler.post(_startRecord);
             _handler.postDelayed(_stopRecord, MEASURING * 1000);        // 1000ms : 1sec
+
+            /*
             _handler.postDelayed(_startRecord, (MEASURING + 1) * 1000);
             _handler.postDelayed(_stopRecord, (MEASURING * 2 + 1) * 1000);
             _handler.postDelayed(_startRecord, (MEASURING * 2 + 2) * 1000);
             _handler.postDelayed(_stopRecord, (MEASURING * 3 + 2) * 1000);
-
+            */
 
 /*
             switch (freqOfTone){
