@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             list.put(averages[1]);
             list.put(averages[2]);
             list.put(averages[3]);
-            obj.put("frequency", list);
+            obj.put("decibel", list);
         } catch (JSONException e) {
             e.printStackTrace();
         }
