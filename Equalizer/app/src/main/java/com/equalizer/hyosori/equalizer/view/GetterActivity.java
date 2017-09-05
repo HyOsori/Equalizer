@@ -20,7 +20,6 @@ public class GetterActivity extends Activity implements GetterView {
 
         final EditText editText = (EditText)findViewById(R.id.editText_name);
 
-
         final TextView textView1 = (TextView) findViewById(R.id.text_view_state_result1);
         final TextView textView2 = (TextView) findViewById(R.id.text_view_state_result2);
         final TextView textView3 = (TextView) findViewById(R.id.text_view_state_result3);

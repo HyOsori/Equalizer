@@ -195,7 +195,12 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         String frequency = (String) seekBar.getTag();
 
         if (frequency.contains("k")) {
-            frequency.replace("kHz", "");
+            if (frequency.contains(".")) {
+                frequency.replace(".", "");
+                frequency.replace("kHz", "00");
+            } else {
+                frequency.replace("kHz", "000");
+            }
         } else {
             frequency.replace("Hz", "");
         }
