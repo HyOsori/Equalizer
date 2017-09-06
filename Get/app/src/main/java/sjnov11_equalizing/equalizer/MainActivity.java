@@ -4,7 +4,9 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
+import android.media.audiofx.Equalizer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     MediaRecorder recorder = null;          // To get max amplitude
     AudioTrack audioTrack = null;           // To play particular frequency audio
 
-    private final int MEASURING = 10;
-    private final int NOISE = 2;
+    private final int MEASURING = 7;
+    private final int NOISE = 3;
 
     // Frequency Tone Generator variable
     private final int duration = 30; // seconds (not correct, so give enough time)
@@ -41,14 +43,19 @@ public class MainActivity extends AppCompatActivity {
     private final byte generatedSnd[] = new byte[2 * numSamples];
 
     private Timer _timer;
+    private TimerTask _timerTask;
+    private Runnable _startRecord;
     private Runnable _stopRecord;
     private Handler _handler;
 
+    private Equalizer _equalizer;
 
     private final ArrayList<Integer> amplitudes = new ArrayList<Integer>();
+
     private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
-
+    private int freqOfTone;
+    private int cnt = 0;
 
     //Handler handler = new Handler();
 
@@ -57,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        _equalizer = new Equalizer(0, 0);
+
 
         /*
         // Measured Amplitude
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
+        cnt = 0;
         switch (v.getId()){
             case R.id.btn60hz:
                 record(60);
@@ -137,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             list.put(averages[1]);
             list.put(averages[2]);
             list.put(averages[3]);
-            obj.put("frequency", list);
+            obj.put("decibel", list);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -152,6 +162,51 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initBandLevel() {
+        _equalizer.setBandLevel((short)0, (short)(0));
+        _equalizer.setBandLevel((short)1, (short)(0));
+        _equalizer.setBandLevel((short)2, (short)(0));
+        _equalizer.setBandLevel((short)3, (short)(0));
+        _equalizer.setBandLevel((short)4, (short)(0));
+    }
+
+
+    // Make TimerTask which evaluates max amplitudes for MEASURE seconds.
+    public void setTimerTask (int freq) {
+
+        _timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int current_amplitude = recorder.getMaxAmplitude();
+
+                        switch (freqOfTone){
+                            case 60:
+                                ((TextView) findViewById(R.id.tv60hzAmp)).setText(String.valueOf(current_amplitude));
+                                amplitudes.add(current_amplitude);
+                                break;
+                            case 230:
+                                ((TextView) findViewById(R.id.tv230hzAmp)).setText(String.valueOf(current_amplitude));
+                                amplitudes.add(current_amplitude);
+                                break;
+                            case 910:
+                                ((TextView) findViewById(R.id.tv910hzAmp)).setText(String.valueOf(current_amplitude));
+                                amplitudes.add(current_amplitude);
+                                break;
+                            case 3600:
+                                ((TextView) findViewById(R.id.tv3600hzAmp)).setText(String.valueOf(current_amplitude));
+                                amplitudes.add(current_amplitude);
+                                break;
+                        }
+
+                    }
+                });
+            }
+        };
     }
 
     // Record amplitude of frequency
@@ -169,64 +224,95 @@ public class MainActivity extends AppCompatActivity {
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setOutputFile(RECORDED_FILE);
 
-        final int freqOfTone = freq;
+        freqOfTone = freq;
 
 
         try {
-            Toast.makeText(getApplicationContext(), "Start Recording", Toast.LENGTH_LONG).show();
-
             recorder.prepare();
             recorder.start();
 
             // Record max amplitudes per second
-            _timer = new Timer();
-            _timer.schedule(new TimerTask() {
+            _startRecord = new Runnable() {
                 @Override
                 public void run() {
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(recorder == null)
-                                return;
-                            int current_amplitude = recorder.getMaxAmplitude();
-                            switch (freqOfTone){
-                                case 60:
-                                    ((TextView) findViewById(R.id.tv60hzAmp)).setText(String.valueOf(current_amplitude));
-                                    amplitudes.add(current_amplitude);
-                                    break;
-                                case 230:
-                                    ((TextView) findViewById(R.id.tv230hzAmp)).setText(String.valueOf(current_amplitude));
-                                    amplitudes.add(current_amplitude);
-                                    break;
-                                case 910:
-                                    ((TextView) findViewById(R.id.tv910hzAmp)).setText(String.valueOf(current_amplitude));
-                                    amplitudes.add(current_amplitude);
-                                    break;
-                                case 3600:
-                                    ((TextView) findViewById(R.id.tv3600hzAmp)).setText(String.valueOf(current_amplitude));
-                                    amplitudes.add(current_amplitude);
-                                    break;
-                            }
+                    Toast.makeText(getApplicationContext(),
+                            "Start Recording", Toast.LENGTH_SHORT).show();
 
-                        }
-                    });
+                    if(_timer != null) {
+                        _timer.cancel();
+                        _timer = null;
+                    }
+                    cnt ++;
+                    setTimerTask(freqOfTone);
+                    _timer = new Timer();
+                    _timer.schedule(_timerTask, 1000, 1000);
+
+                    initBandLevel();
+                    switch (freqOfTone){
+                        case 60:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 0, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 0, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 0, (short) (1500));
+                            playFreq(60);
+                            break;
+                        case 230:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 1, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 1, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 1, (short) (1500));
+                            playFreq(230);
+                            break;
+                        case 910:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 2, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 2, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 2, (short) (1500));
+                            playFreq(910);
+                            break;
+                        case 3600:
+                            if(cnt == 1)
+                                _equalizer.setBandLevel((short) 3, (short) (-1500));
+                            else if(cnt == 2)
+                                _equalizer.setBandLevel((short) 3, (short) (0));
+                            else if(cnt == 3)
+                                _equalizer.setBandLevel((short) 3, (short) (1500));
+                            playFreq(3600);
+                            break;
+                    }
+
                 }
-            },1000,1000);
+            };
 
             _stopRecord = new Runnable() {
                 @Override
                 public void run() {
+                    Toast.makeText(getApplicationContext(),
+                            "Stop Recording", Toast.LENGTH_SHORT).show();
 
-                    _timer.cancel();
+                    if(_timer != null) {
+                        _timer.cancel();
+                        _timer = null;
+                    }
+
                     stopFreq();
+                    /*
                     if(recorder != null) {
                         recorder.stop();
                         recorder.release();
                         recorder = null;
                     }
+                    */
 
-                    Toast.makeText(getApplicationContext(),
-                            "Stop Recording", Toast.LENGTH_LONG).show();
+                    for(int i = 0; i < amplitudes.size(); i ++){
+                        Log.d("full arraylist", "value (" + i + ") :" + amplitudes.get(i));
+                    }
 
                     // Average Amplitudes
                     // Except index 0, 1 noising part for accuracy
@@ -238,30 +324,50 @@ public class MainActivity extends AppCompatActivity {
                     int average;
                     switch (freqOfTone){
                         case 60:
-                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[0] = average;
-                            ((TextView) findViewById(R.id.tv60hzAverage)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv60hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv60hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv60hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 230:
-                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[1] = average;
-                            ((TextView) findViewById(R.id.tv230hzAverage)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv230hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv230hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv230hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 910:
-                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[2] = average;
-                            ((TextView) findViewById(R.id.tv910hzAverage)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv910hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv910hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv910hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
                         case 3600:
-                            average = sum_amplitude / (MEASURING - NOISE - 1);
+                            average = sum_amplitude / (amplitudes.size() - NOISE);
                             averages[3] = average;
-                            ((TextView) findViewById(R.id.tv3600hzAverage)).setText(String.valueOf(average));
+                            if(cnt == 1)
+                                ((TextView) findViewById(R.id.tv3600hzAverage1)).setText(String.valueOf(average));
+                            else if(cnt == 2)
+                                ((TextView) findViewById(R.id.tv3600hzAverage2)).setText(String.valueOf(average));
+                            else if(cnt == 3)
+                                ((TextView) findViewById(R.id.tv3600hzAverage3)).setText(String.valueOf(average));
                             sum_amplitude = 0;
                             amplitudes.clear();
                             break;
@@ -269,9 +375,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+
+/*
+            // Record max amplitudes per second
+            _timer = new Timer();
+            _timer.schedule(_timerTask,1000,1000);
+*/
+
+
             _handler = new Handler();
+            _handler.post(_startRecord);
             _handler.postDelayed(_stopRecord, MEASURING * 1000);        // 1000ms : 1sec
 
+            /*
+            _handler.postDelayed(_startRecord, (MEASURING + 1) * 1000);
+            _handler.postDelayed(_stopRecord, (MEASURING * 2 + 1) * 1000);
+            _handler.postDelayed(_startRecord, (MEASURING * 2 + 2) * 1000);
+            _handler.postDelayed(_stopRecord, (MEASURING * 3 + 2) * 1000);
+            */
+
+/*
             switch (freqOfTone){
                 case 60:
                     playFreq(60);
@@ -286,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
                     playFreq(3600);
                     break;
             }
-
+*/
 
         } catch (Exception e) {
             Log.e("SampleAudioRecorder", "Exception : ", e);
@@ -299,8 +422,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < numSamples; ++i) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freq));
         }
-        Log.e("fuck:", "genTone: sample i: " + 1 + " = sample[i]" + sample[1]);
-        Log.e("fuck:", "genTone: Gen Done");
+
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
         int idx = 0;

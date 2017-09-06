@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="horizontal"
-    android:columnCount="4"
+    android:columnCount="6"
     android:rowCount="5"
     tools:context="sjnov11_equalizing.equalizer.MainActivity">
 
@@ -19,79 +19,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn60hz"
-        android:onClick="onClick" />
-
-    <Button
-        android:text="910hz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn910hz"
-        android:layout_row="2"
+        android:layout_row="0"
         android:layout_column="0"
         android:onClick="onClick" />
-
-    <TextView
-        android:text="60평균"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv60hzAverage"
-        android:layout_row="0"
-        android:layout_column="3" />
-
-    <TextView
-        android:text="910평균"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv910hzAverage"
-        android:layout_row="2"
-        android:layout_column="3" />
-
-    <Button
-        android:text="3600hz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn3600hz"
-        android:onClick="onClick" />
-
-    <TextView
-        android:text="230측정"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv230hzAmp"
-        android:layout_row="1"
-        android:layout_column="2" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv60hzAmp"
         android:layout_row="0"
-        android:layout_column="2"
+        android:layout_column="1"
         android:text="60측정" />
 
     <TextView
-        android:text="910측정"
+        android:text="평균1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv910hzAmp"
-        android:layout_row="2"
-        android:layout_column="2" />
-
-    <TextView
-        android:text="3600측정"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv3600hzAmp"
-        android:layout_row="3"
-        android:layout_column="2" />
-
-    <TextView
-        android:text="230평균"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv230hzAverage"
-        android:layout_row="1"
+        android:id="@+id/tv60hzAverage1"
+        android:layout_row="0"
         android:layout_column="3" />
+
+    <TextView
+        android:text="평균2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv60hzAverage2"
+        android:layout_row="0"
+        android:layout_column="4" />
+
+    <TextView
+        android:text="평균3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv60hzAverage3"
+        android:layout_row="0"
+        android:layout_column="5" />
 
     <Button
         android:text="230hz"
@@ -103,19 +65,119 @@
         android:onClick="onClick" />
 
     <TextView
-        android:text="3600평균"
+        android:text="230측정"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv3600hzAverage"
+        android:id="@+id/tv230hzAmp"
+        android:layout_row="1"
+        android:layout_column="1" />
+
+    <TextView
+        android:text="평균1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv230hzAverage1"
+        android:layout_row="1"
+        android:layout_column="3" />
+
+    <TextView
+        android:text="평균2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv230hzAverage2"
+        android:layout_row="1"
+        android:layout_column="4" />
+
+    <TextView
+        android:text="평균3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv230hzAverage3"
+        android:layout_row="1"
+        android:layout_column="5" />
+
+    <Button
+        android:text="910hz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn910hz"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:onClick="onClick" />
+
+    <TextView
+        android:text="910측정"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv910hzAmp"
+        android:layout_row="2"
+        android:layout_column="1" />
+
+
+    <TextView
+        android:text="평균1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv910hzAverage1"
+        android:layout_row="2"
+        android:layout_column="3" />
+
+    <TextView
+        android:text="평균2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv910hzAverage2"
+        android:layout_row="2"
+        android:layout_column="4" />
+
+    <TextView
+        android:text="평균3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv910hzAverage3"
+        android:layout_row="2"
+        android:layout_column="5" />
+
+    <Button
+        android:text="3600hz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn3600hz"
+        android:onClick="onClick"
+        android:layout_row="3"
+        android:layout_column="0" />
+
+    <TextView
+        android:text="측정"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv3600hzAmp"
+        android:layout_row="3"
+        android:layout_column="1" />
+
+    <TextView
+        android:text="평균1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv3600hzAverage1"
         android:layout_row="3"
         android:layout_column="3" />
 
-    <Button
-        android:text="저장"
+    <TextView
+        android:text="평균2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSave"
-        android:onClick="onClick" />
+        android:id="@+id/tv3600hzAverage2"
+        android:layout_row="3"
+        android:layout_column="4" />
+
+    <TextView
+        android:text="평균3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv3600hzAverage3"
+        android:layout_row="3"
+        android:layout_column="5" />
 
     <EditText
         android:layout_width="100dp"
@@ -124,8 +186,20 @@
         android:ems="10"
         android:id="@+id/etDevice"
         android:layout_row="4"
-        android:layout_column="2"
-        tools:text="디바이스" />
+        android:layout_column="1" />
+
+
+
+    <Button
+        android:text="저장"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSave"
+        android:onClick="onClick"
+        android:layout_row="4"
+        android:layout_column="0" />
+
+
 
 
 </GridLayout>
