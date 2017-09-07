@@ -17,4 +17,6 @@ public class GetterPresenter implements Presenter {
     public void onDestroy() {
 
     }
+
+    //public boolean checkEnb()
 }

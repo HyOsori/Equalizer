@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by kimjihong on 2017. 7. 25..
  */
 
 
-public class SubActivity extends Activity {
+public class SubActivity extends Activity implements View.OnClickListener{
 
     InputMethodManager imm;
     ConstraintLayout c_layout;
@@ -24,31 +26,54 @@ public class SubActivity extends Activity {
     EditText editText;
 
     Button[] buttons;
-    int[] button_id = {R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5};
+    int[] button_id = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3};
 
     TextView[] textViews;
-    int[] textView_id = {R.id.text_view_state_result1, R.id.text_view_state_result2, R.id.text_view_state_result3, R.id.text_view_state_result4,
-                         R.id.text_view_state_result5};
+    int[] textView_id = {R.id.textView_state_result0, R.id.textView_state_result1, R.id.textView_state_result2, R.id.textView_state_result3};
 
     Button R_button;
 
     int i;
-    boolean enb;
 
-    public boolean checkEnb(TextView tv1, TextView tv2, TextView tv3, TextView tv4, TextView tv5, EditText et){
-        if(tv1.getText().toString().equals("측정") && tv2.getText().toString().equals("측정")
-                && tv3.getText().toString().equals("측정") && tv4.getText().toString().equals("측정")
-                && tv5.getText().toString().equals("측정") && et.getText().toString().length() != 0){
-            return true;
+    public void checkEnb(TextView[] tvs, EditText et){
+        if(tvs[0].getText().toString().equals("측정") && tvs[1].getText().toString().equals("측정")
+                && tvs[2].getText().toString().equals("측정") && tvs[3].getText().toString().equals("측정")
+                && et.getText().toString().length() != 0){
+            R_button.setEnabled(true);
         }
-        else{
-            return false;
+    }
+
+    public void setResult(TextView[] tvs, int i){
+        tvs[i].setText("측정");
+    }
+
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.button_0:
+                setResult(textViews,0);
+                checkEnb(textViews,editText);
+                break;
+            case R.id.button_1:
+                setResult(textViews,1);
+                checkEnb(textViews,editText);
+                break;
+            case R.id.button_2:
+                setResult(textViews,2);
+                checkEnb(textViews,editText);
+                break;
+            case R.id.button_3:
+                setResult(textViews,3);
+                checkEnb(textViews,editText);
+                break;
+            default:
+                break;
         }
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
 
@@ -57,84 +82,19 @@ public class SubActivity extends Activity {
 
         editText = (EditText)findViewById(R.id.editText_name);
 
-        textViews = new TextView[5];
-
-        for(i = 0; i < 5; i++){
+        textViews = new TextView[4];
+        for(i = 0; i < 4; i++){
             textViews[i] = (TextView)findViewById(textView_id[i]);
         }
 
-        buttons = new Button[5];
-
+        buttons = new Button[4];
         for(i = 0; i < buttons.length; i++){
             buttons[i] = (Button)findViewById(button_id[i]);
+            buttons[i].setOnClickListener(this);
         }
 
         R_button = (Button) findViewById(R.id.button_register);
         R_button.setEnabled(false);
-
-
-        buttons[0].setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textViews[0].setText("측정");
-
-                enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                if(enb == true){
-                    R_button.setEnabled(true);
-                }
-
-            }
-        });
-
-        buttons[1].setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textViews[1].setText("측정");
-
-                enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                if(enb == true){
-                    R_button.setEnabled(true);
-                }
-
-            }
-
-        });
-
-        buttons[2].setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textViews[2].setText("측정");
-
-                enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                if(enb == true){
-                    R_button.setEnabled(true);
-                }
-            }
-        });
-
-        buttons[3].setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textViews[3].setText("측정");
-
-                enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                if(enb == true){
-                    R_button.setEnabled(true);
-                }
-            }
-        });
-
-        buttons[4].setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textViews[4].setText("측정");
-
-                enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                if(enb == true){
-                    R_button.setEnabled(true);
-                }
-            }
-        });
 
         c_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,10 +118,7 @@ public class SubActivity extends Activity {
                     R_button.setEnabled(false);
                 }
                 else{
-                    enb = checkEnb(textViews[0],textViews[1],textViews[2],textViews[3],textViews[4],editText);
-                    if(enb == true){
-                        R_button.setEnabled(true);
-                    }
+                    checkEnb(textViews,editText);
                 }
             }
 

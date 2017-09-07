@@ -13,6 +13,7 @@ import com.equalizer.hyosori.equalizer.R;
 
 
 public class GetterActivity extends Activity implements GetterView {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
