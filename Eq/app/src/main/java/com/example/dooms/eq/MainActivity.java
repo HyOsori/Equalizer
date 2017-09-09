@@ -14,7 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private SeekBar mSeekbar_1;
     private SeekBar mSeekbar_2;
     private SeekBar mSeekbar_3;
@@ -48,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buttonPlay = (Button) findViewById(R.id.play);
-        buttonStop = (Button) findViewById(R.id.stop);
-
-
         try {
             mEqualizer = null;
             mEqualizer = new Equalizer(0, 0 );
@@ -59,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
         }
+
+        buttonPlay = (Button) findViewById(R.id.play);
+        buttonStop = (Button) findViewById(R.id.stop);
+
+
         mSeekbar_1 = (SeekBar)findViewById(R.id.seekBar_1);
         mSeekbar_1.setProgress(mEqualizer.getBandLevel((short) 0) + 1500);
         mSeekbar_2 = (SeekBar)findViewById(R.id.seekBar_2);
@@ -221,6 +222,39 @@ public class MainActivity extends AppCompatActivity {
         mSeekbar_4.incrementProgressBy(1);
         mSeekbar_5.incrementProgressBy(1);
     }
+
+//====================================================================================================================
+
+    SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            switch (seekBar.getId()){
+                case R.id.seekBar_1:
+                        mEqualizer.setBandLevel((short) 0, (short) (progress - 1500));
+                        mBandVal_1.setText(String.valueOf(mEqualizer.getBandLevel((short) 0)));
+                    break;
+                case R.id.seekBar_2:
+                    break;
+                case R.id.seekBar_3:
+                    break;
+                case R.id.seekBar_4:
+                    break;
+                case R.id.seekBar_5:
+                    break;
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
+//=============================================================================================================
     private void playAudio(String url) throws Exception{
         killMediaPlayer();
 
