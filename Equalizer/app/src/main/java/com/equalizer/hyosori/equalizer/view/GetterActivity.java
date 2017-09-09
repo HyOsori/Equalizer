@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.equalizer.hyosori.equalizer.R;
+import com.equalizer.hyosori.equalizer.presenter.GetterPresenter;
 
 
 public class GetterActivity extends Activity implements View.OnClickListener, GetterView {
@@ -32,6 +33,8 @@ public class GetterActivity extends Activity implements View.OnClickListener, Ge
 
     int i;
 
+    GetterPresenter presenter = new GetterPresenter(this);
+
     public void checkEnb(TextView[] tvs, EditText et) {
         if (tvs[0].getText().toString().equals("측정") && tvs[1].getText().toString().equals("측정")
                 && tvs[2].getText().toString().equals("측정") && tvs[3].getText().toString().equals("측정")
@@ -48,20 +51,28 @@ public class GetterActivity extends Activity implements View.OnClickListener, Ge
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_0:
-                setResult(textViews, 0);
-                checkEnb(textViews, editText);
+                if (presenter.onGetBtnClicked(60)) {
+                    setResult(textViews, 0);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_1:
-                setResult(textViews, 1);
-                checkEnb(textViews, editText);
+                if (presenter.onGetBtnClicked(230)) {
+                    setResult(textViews, 1);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_2:
-                setResult(textViews, 2);
-                checkEnb(textViews, editText);
+                if (presenter.onGetBtnClicked(910)) {
+                    setResult(textViews, 2);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_3:
-                setResult(textViews, 3);
-                checkEnb(textViews, editText);
+                if (presenter.onGetBtnClicked(3600)) {
+                    setResult(textViews, 3);
+                    checkEnb(textViews, editText);
+                }
                 break;
             default:
                 break;
@@ -127,11 +138,12 @@ public class GetterActivity extends Activity implements View.OnClickListener, Ge
         R_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                String name = editText.getText().toString();
+                if (presenter.onSaveBtnClicked(name)) {
+                    finish();
+                }
             }
         });
-        //String name = editText.getText().toString();
-
     }
 
 }
