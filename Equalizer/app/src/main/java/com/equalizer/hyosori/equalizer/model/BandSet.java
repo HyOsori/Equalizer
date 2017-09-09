@@ -2,7 +2,7 @@ package com.equalizer.hyosori.equalizer.model;
 
 
 public class BandSet {
-    private int[] amplitudes = new int[4];
+    public int[] amplitudes = new int[4];
 
     public BandSet(String name) {
         //이름으로 파일에서 정보를 읽어옵니다.
