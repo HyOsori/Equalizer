@@ -28,7 +28,6 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
     private SeekBar seekBar230;
     private SeekBar seekBar910;
     private SeekBar seekBar3600;
-    private SeekBar seekBar14000;
 
     SetterPresenter presenter = new SetterPresenter(this);
 
@@ -46,7 +45,6 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         seekBar230 = (SeekBar) findViewById(R.id.seekBar2);
         seekBar910 = (SeekBar) findViewById(R.id.seekBar3);
         seekBar3600 = (SeekBar) findViewById(R.id.seekBar4);
-        seekBar14000 = (SeekBar) findViewById(R.id.seekBar5);
 
         setSupportActionBar(toolbar);
 
@@ -135,20 +133,6 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
                 onSeekBarProgressChanged(seekBar);
             }
         });
-
-        seekBar14000.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                onSeekBarProgressChanged(seekBar);
-            }
-        });
     }
 
     @Override
@@ -193,17 +177,6 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
 
     public void onSeekBarProgressChanged(SeekBar seekBar) {
         String frequency = (String) seekBar.getTag();
-
-        if (frequency.contains("k")) {
-            if (frequency.contains(".")) {
-                frequency.replace(".", "");
-                frequency.replace("kHz", "00");
-            } else {
-                frequency.replace("kHz", "000");
-            }
-        } else {
-            frequency.replace("Hz", "");
-        }
 
         presenter.onSeekBarChanged(Integer.parseInt(frequency), seekBar.getProgress());
     }

@@ -24,7 +24,7 @@
             android:background="?attr/colorPrimary"
             android:theme="?attr/actionBarTheme"
             android:minHeight="?attr/actionBarSize"
-            tools:layout_editor_absoluteY="63dp"
+            tools:layout_editor_absoluteY="144dp"
             tools:layout_editor_absoluteX="8dp"
             android:id="@+id/toolbar"
             tools:ignore="MissingConstraints" />
@@ -46,7 +46,7 @@
             android:id="@+id/spinnerLayout"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -129,7 +129,7 @@
             tools:layout_constraintRight_creator="1"
             tools:layout_constraintLeft_creator="1"
             app:layout_constraintHorizontal_bias="0.46"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintLeft_toLeftOf="@+id/spinnerLayout"
             app:layout_constraintRight_toRightOf="@+id/spinnerLayout"
             app:layout_constraintTop_toBottomOf="@+id/spinnerLayout"
@@ -165,15 +165,6 @@
                 android:layout_marginTop="8dp" />
 
             <TextView
-                android:text="@string/frequency5"
-                android:layout_width="58dp"
-                android:layout_height="17dp"
-                android:id="@+id/seekBar_text5"
-                app:layout_constraintLeft_toLeftOf="@+id/seekBar_text1"
-                app:layout_constraintTop_toTopOf="@+id/seekBar5"
-                android:layout_marginTop="8dp" />
-
-            <TextView
                 android:text="@string/frequency3"
                 android:layout_width="58dp"
                 android:layout_height="17dp"
@@ -186,7 +177,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar4"
-                android:tag="@string/frequency4"
+                android:tag="3600"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -194,28 +185,14 @@
                 tools:layout_constraintLeft_creator="1"
                 app:layout_constraintLeft_toLeftOf="@+id/seekBar3"
                 app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar3" />
 
             <SeekBar
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekBar5"
-                android:tag="@string/frequency5"
-                android:max="3000"
-                android:progress="1500"
-                tools:layout_constraintRight_creator="1"
-                app:layout_constraintRight_toRightOf="@+id/seekBar4"
-                tools:layout_constraintLeft_creator="1"
-                app:layout_constraintLeft_toLeftOf="@+id/seekBar4"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar4" />
-
-            <SeekBar
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/seekBar3"
-                android:tag="@string/frequency3"
+                android:tag="910"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -223,14 +200,14 @@
                 tools:layout_constraintLeft_creator="1"
                 app:layout_constraintLeft_toLeftOf="@+id/seekBar2"
                 app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar2" />
 
             <SeekBar
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar2"
-                android:tag="@string/frequency2"
+                android:tag="230"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
@@ -238,13 +215,13 @@
                 tools:layout_constraintLeft_creator="1"
                 app:layout_constraintLeft_toLeftOf="@+id/seekBar1"
                 app:layout_constraintHorizontal_bias="0.0"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar1" />
 
             <SeekBar
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBar1"
-                android:tag="@string/frequency1"
+                android:tag="60"
                 android:max="3000"
                 android:progress="1500"
                 tools:layout_constraintRight_creator="1"
