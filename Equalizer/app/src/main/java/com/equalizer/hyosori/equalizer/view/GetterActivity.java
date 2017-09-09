@@ -1,24 +1,22 @@
-package com.uxui.equalizer.hyosori.ux_ui;
+package com.equalizer.hyosori.equalizer.view;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-/**
- * Created by kimjihong on 2017. 7. 25..
- */
+import com.equalizer.hyosori.equalizer.R;
+import com.equalizer.hyosori.equalizer.presenter.GetterPresenter;
 
 
-public class SubActivity extends Activity implements View.OnClickListener{
+public class GetterActivity extends Activity implements View.OnClickListener, GetterView {
 
     InputMethodManager imm;
     ConstraintLayout c_layout;
@@ -35,36 +33,46 @@ public class SubActivity extends Activity implements View.OnClickListener{
 
     int i;
 
-    public void checkEnb(TextView[] tvs, EditText et){
-        if(tvs[0].getText().toString().equals("측정") && tvs[1].getText().toString().equals("측정")
+    GetterPresenter presenter = new GetterPresenter(this);
+
+    public void checkEnb(TextView[] tvs, EditText et) {
+        if (tvs[0].getText().toString().equals("측정") && tvs[1].getText().toString().equals("측정")
                 && tvs[2].getText().toString().equals("측정") && tvs[3].getText().toString().equals("측정")
-                && et.getText().toString().length() != 0){
+                && et.getText().toString().length() != 0) {
             R_button.setEnabled(true);
         }
     }
 
-    public void setResult(TextView[] tvs, int i){
+    public void setResult(TextView[] tvs, int i) {
         tvs[i].setText("측정");
     }
 
     @Override
-    public void onClick(View v){
-        switch (v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.button_0:
-                setResult(textViews,0);
-                checkEnb(textViews,editText);
+                if (presenter.onGetBtnClicked(60)) {
+                    setResult(textViews, 0);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_1:
-                setResult(textViews,1);
-                checkEnb(textViews,editText);
+                if (presenter.onGetBtnClicked(230)) {
+                    setResult(textViews, 1);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_2:
-                setResult(textViews,2);
-                checkEnb(textViews,editText);
+                if (presenter.onGetBtnClicked(910)) {
+                    setResult(textViews, 2);
+                    checkEnb(textViews, editText);
+                }
                 break;
             case R.id.button_3:
-                setResult(textViews,3);
-                checkEnb(textViews,editText);
+                if (presenter.onGetBtnClicked(3600)) {
+                    setResult(textViews, 3);
+                    checkEnb(textViews, editText);
+                }
                 break;
             default:
                 break;
@@ -75,21 +83,21 @@ public class SubActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub);
+        setContentView(R.layout.getter);
 
         imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        c_layout = (ConstraintLayout)findViewById(R.id.c_layout_wrapper_content);
+        c_layout = (ConstraintLayout) findViewById(R.id.c_layout_wrapper_content);
 
-        editText = (EditText)findViewById(R.id.editText_name);
+        editText = (EditText) findViewById(R.id.editText_name);
 
         textViews = new TextView[4];
-        for(i = 0; i < 4; i++){
-            textViews[i] = (TextView)findViewById(textView_id[i]);
+        for (i = 0; i < 4; i++) {
+            textViews[i] = (TextView) findViewById(textView_id[i]);
         }
 
         buttons = new Button[4];
-        for(i = 0; i < buttons.length; i++){
-            buttons[i] = (Button)findViewById(button_id[i]);
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i] = (Button) findViewById(button_id[i]);
             buttons[i].setOnClickListener(this);
         }
 
@@ -99,7 +107,7 @@ public class SubActivity extends Activity implements View.OnClickListener{
         c_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imm.hideSoftInputFromWindow(editText.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
             }
         });
@@ -114,11 +122,10 @@ public class SubActivity extends Activity implements View.OnClickListener{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //String name = editText.getText().toString();
-                if(s.length() <= 0){
+                if (s.length() <= 0) {
                     R_button.setEnabled(false);
-                }
-                else{
-                    checkEnb(textViews,editText);
+                } else {
+                    checkEnb(textViews, editText);
                 }
             }
 
@@ -131,11 +138,12 @@ public class SubActivity extends Activity implements View.OnClickListener{
         R_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-            finish();
+                String name = editText.getText().toString();
+                if (presenter.onSaveBtnClicked(name)) {
+                    finish();
+                }
             }
         });
-        //String name = editText.getText().toString();
-
     }
 
 }
