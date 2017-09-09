@@ -2,6 +2,9 @@ package com.equalizer.hyosori.equalizer.view;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,133 +15,123 @@ import android.widget.TextView;
 import com.equalizer.hyosori.equalizer.R;
 
 
-public class GetterActivity extends Activity implements GetterView {
+public class GetterActivity extends Activity implements View.OnClickListener, GetterView {
+
+    InputMethodManager imm;
+    ConstraintLayout c_layout;
+
+    EditText editText;
+
+    Button[] buttons;
+    int[] button_id = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3};
+
+    TextView[] textViews;
+    int[] textView_id = {R.id.textView_state_result0, R.id.textView_state_result1, R.id.textView_state_result2, R.id.textView_state_result3};
+
+    Button R_button;
+
+    int i;
+
+    public void checkEnb(TextView[] tvs, EditText et) {
+        if (tvs[0].getText().toString().equals("측정") && tvs[1].getText().toString().equals("측정")
+                && tvs[2].getText().toString().equals("측정") && tvs[3].getText().toString().equals("측정")
+                && et.getText().toString().length() != 0) {
+            R_button.setEnabled(true);
+        }
+    }
+
+    public void setResult(TextView[] tvs, int i) {
+        tvs[i].setText("측정");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_0:
+                setResult(textViews, 0);
+                checkEnb(textViews, editText);
+                break;
+            case R.id.button_1:
+                setResult(textViews, 1);
+                checkEnb(textViews, editText);
+                break;
+            case R.id.button_2:
+                setResult(textViews, 2);
+                checkEnb(textViews, editText);
+                break;
+            case R.id.button_3:
+                setResult(textViews, 3);
+                checkEnb(textViews, editText);
+                break;
+            default:
+                break;
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.getter);
 
-        final EditText editText = (EditText)findViewById(R.id.editText_name);
+        imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        c_layout = (ConstraintLayout) findViewById(R.id.c_layout_wrapper_content);
 
-        final TextView textView1 = (TextView) findViewById(R.id.text_view_state_result1);
-        final TextView textView2 = (TextView) findViewById(R.id.text_view_state_result2);
-        final TextView textView3 = (TextView) findViewById(R.id.text_view_state_result3);
-        final TextView textView4 = (TextView) findViewById(R.id.text_view_state_result4);
-        final TextView textView5 = (TextView) findViewById(R.id.text_view_state_result5);
+        editText = (EditText) findViewById(R.id.editText_name);
 
-        Button button1 = (Button) findViewById(R.id.button_1);
-        Button button2 = (Button) findViewById(R.id.button_2);
-        Button button3 = (Button) findViewById(R.id.button_3);
-        Button button4 = (Button) findViewById(R.id.button_4);
-        Button button5 = (Button) findViewById(R.id.button_5);
+        textViews = new TextView[4];
+        for (i = 0; i < 4; i++) {
+            textViews[i] = (TextView) findViewById(textView_id[i]);
+        }
 
-        final Button R_button = (Button) findViewById(R.id.button_register);
+        buttons = new Button[4];
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i] = (Button) findViewById(button_id[i]);
+            buttons[i].setOnClickListener(this);
+        }
+
+        R_button = (Button) findViewById(R.id.button_register);
         R_button.setEnabled(false);
 
-        button1.setOnClickListener(new Button.OnClickListener() {
+        c_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+            }
+        });
+
+        editText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //String name = editText.getText().toString();
+                if (s.length() <= 0) {
+                    R_button.setEnabled(false);
+                } else {
+                    checkEnb(textViews, editText);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        R_button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textView1.setText("측정");
-
-                if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                        && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                        && textView5.getText().toString().equals("측정")){
-                    if(editText.getText().toString().length() != 0){
-                        R_button.setEnabled(true);
-                    }
-                }
-
+                finish();
             }
         });
-
-        button2.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView2.setText("측정");
-
-                if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                        && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                        && textView5.getText().toString().equals("측정")){
-                    if(editText.getText().toString().length() != 0){
-                        R_button.setEnabled(true);
-                    }
-                }
-            }
-
-        });
-
-        button3.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView3.setText("측정");
-
-                if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                        && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                        && textView5.getText().toString().equals("측정")){
-                    if(editText.getText().toString().length() != 0){
-                        R_button.setEnabled(true);
-                    }
-                }
-            }
-        });
-
-        button4.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView4.setText("측정");
-
-                if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                        && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                        && textView5.getText().toString().equals("측정")){
-                    if(editText.getText().toString().length() != 0){
-                        R_button.setEnabled(true);
-                    }
-                }
-            }
-        });
-
-        button5.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textView5.setText("측정");
-
-                if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                        && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                        && textView5.getText().toString().equals("측정")){
-                    if(editText.getText().toString().length() != 0){
-                        R_button.setEnabled(true);
-                    }
-                }
-            }
-        });
-
-
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == event.KEYCODE_ENTER){
-//                    String name = editText.getText().toString();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editText.getWindowToken(),0);
-                    String name = editText.getText().toString();
-                    if(name.length() == 0){
-                        R_button.setEnabled(false);
-                    } else{
-                        if(textView1.getText().toString().equals("측정") && textView2.getText().toString().equals("측정")
-                                && textView3.getText().toString().equals("측정") && textView4.getText().toString().equals("측정")
-                                && textView5.getText().toString().equals("측정")) {
-                            R_button.setEnabled(true);
-                        }
-                    }
-                    return true;
-                }
-
-                return false;
-            }
-        });
-
-
+        //String name = editText.getText().toString();
 
     }
+
 }
