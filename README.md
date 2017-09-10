@@ -6,11 +6,11 @@ Equalizing music by analyzing input frequency
 
 ## Parts
 
-* Eq : Folder For EQ Setting
+* Equalize : set input value and recieve data from GET
 
-* UX_UI : Folder For UX_UI Setting
+* UX_UI : design user interface
 
-* GET : Foler For Get Setting
+* GET : measure size of sound and save
 
 ## Contributor
 
