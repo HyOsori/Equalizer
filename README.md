@@ -2,9 +2,39 @@ Equalizer
 ==================================================
 Equalizing music by analyzing input frequency
 
-Eq : Folder For EQ Setting
-UX_UI : Folder For UX_UI Setting
-GET : Foler For Get Setting
+
+
+## Parts
+
+* Equalize : set input value and recieve data from GET
+
+* UX_UI : design user interface by using MVP pattern
+
+* GET : measure size of sound and save
+
+## Contributor
+
+**Eq**
+
+[Joonho Wohn](https://github.com/doomsheart "" ),
+[KimJangHyeon](https://github.com/KimJangHyeon "" ),
+[JunwonP](https://github.com/JunwonP "" ),
+[JiHyeonSEO](https://github.com/JiHyeonSEO "" )
+
+**UX_UI**
+
+[kimjieun02](https://github.com/kimjieun02 "" ), 
+[Jihong](https://github.com/kjh32790 "" )
+
+**GET**
+
+[sjnov11](https://github.com/sjnov11 "" ),
+[Hanyelin](https://github.com/Hanyelin "" ),
+[JihunJo](https://github.com/JojihunCho "" )
+
+
+### IDE
+Android Studio 2.3
 
 ## License
 ```
