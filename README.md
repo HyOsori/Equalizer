@@ -2,11 +2,16 @@ Equalizer
 ==================================================
 Equalizing music by analyzing input frequency
 
-Eq : Folder For EQ Settin
 
-UX_UI : Folder For UX_UI Setting
+## Parts
+* Eq : Folder For EQ Setting
 
-GET : Foler For Get Setting
+* UX_UI : Folder For UX_UI Setting
+
+* GET : Foler For Get Setting
+
+### IDE
+Android Studio 2.3
 
 ## License
 ```
