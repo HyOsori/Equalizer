@@ -2,7 +2,7 @@ Equalizer
 ==================================================
 Equalizing music by analyzing input frequency
 
-Eq : Folder For EQ Setting
+Eq : Folder For EQ Settin
 
 UX_UI : Folder For UX_UI Setting
 
