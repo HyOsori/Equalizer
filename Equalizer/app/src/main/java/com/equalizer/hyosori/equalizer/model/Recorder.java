@@ -9,11 +9,14 @@ import android.media.audiofx.Equalizer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.equalizer.hyosori.equalizer.model.BandSet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,20 +42,17 @@ public class Recorder extends AppCompatActivity{
     private TimerTask _timerTask;
     private Runnable _startRecord;
     private Runnable _stopRecord;
-    private Runnable _returnRecord;
     private Handler _handler;
 
-    private Equalizer _equalizer;
-    public BandSet _bandset;
+    private Equalizer _equalizer = new Equalizer(0, 0);
 
     private final ArrayList<Integer> amplitudes = new ArrayList<Integer>();
 
-    private final int []averages = {0, 0, 0, 0};
     private int sum_amplitude = 0;
     private int freqOfTone;
     private int cnt = 0;
     private int average = 0;
-    private BandSet band = new BandSet();
+    public BandSet band = new BandSet();
 
 
 
@@ -142,7 +142,7 @@ public class Recorder extends AppCompatActivity{
 
 
     public boolean record(int frequency) {
-        int amplitude = 0;
+        //int amplitude = 0;
         if(recorder != null) {
 //            recorder.stop();
             recorder.release();
@@ -151,7 +151,7 @@ public class Recorder extends AppCompatActivity{
 
         recorder = new MediaRecorder();
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setOutputFile(RECORDED_FILE);
@@ -167,8 +167,8 @@ public class Recorder extends AppCompatActivity{
             _startRecord = new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(),
-                            "Start Recording", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),
+                    //       "Start Recording", Toast.LENGTH_SHORT).show();
 
                     if(_timer != null) {
                         _timer.cancel();
@@ -225,8 +225,8 @@ public class Recorder extends AppCompatActivity{
             _stopRecord = new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(),
-                            "Stop Recording", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),
+                    //        "Stop Recording", Toast.LENGTH_SHORT).show();
 
                     if(_timer != null) {
                         _timer.cancel();
@@ -234,13 +234,13 @@ public class Recorder extends AppCompatActivity{
                     }
 
                     stopFreq();
-                    /*
+
                     if(recorder != null) {
                         recorder.stop();
                         recorder.release();
                         recorder = null;
                     }
-                    */
+
 
                     for(int i = 0; i < amplitudes.size(); i ++){
                         Log.d("full arraylist", "value (" + i + ") :" + amplitudes.get(i));
@@ -257,7 +257,7 @@ public class Recorder extends AppCompatActivity{
                     switch (freqOfTone){
                         case 60:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
-                            _bandset.amplitudes[0] = average;
+                            band.amplitudes[0] = average;
                             //averages[0] = average;
                             /*
                             if(cnt == 1)
@@ -272,7 +272,7 @@ public class Recorder extends AppCompatActivity{
                             break;
                         case 230:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
-                            _bandset.amplitudes[1] = average;
+                            band.amplitudes[1] = average;
                             //averages[1] = average;
                             /*
                             if(cnt == 1)
@@ -287,7 +287,7 @@ public class Recorder extends AppCompatActivity{
                             break;
                         case 910:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
-                            _bandset.amplitudes[0] = average;
+                            band.amplitudes[2] = average;
                             //averages[2] = average;
                             /*
                             if(cnt == 1)
@@ -302,7 +302,7 @@ public class Recorder extends AppCompatActivity{
                             break;
                         case 3600:
                             average = sum_amplitude / (amplitudes.size() - NOISE);
-                            _bandset.amplitudes[0] = average;
+                            band.amplitudes[3] = average;
                             //averages[3] = average;
                             /*if(cnt == 1)
                                 ((TextView) findViewById(R.id.tv3600hzAverage1)).setText(String.valueOf(average));
@@ -315,14 +315,6 @@ public class Recorder extends AppCompatActivity{
                             amplitudes.clear();
                             break;
                     }
-                }
-            };
-
-            _returnRecord = new Runnable() {
-                @Override
-                public void run() {
-
-                    //return average;
                 }
             };
 /*
@@ -364,19 +356,38 @@ public class Recorder extends AppCompatActivity{
             Log.e("SampleAudioRecorder", "Exception : ", e);
         }
 
-        /*
-            TODO: 측정을 해서 그 값을 amplitude에 넣어주세요
-        */
-
-        band.setOne(frequency, amplitude);
+        //band.setOne(frequency, amplitude);
 
         return true;
     }
 
     public boolean saveDeviceData(String name) {
-        /*
-            TODO: band와 받아온 name을 저장합니다.
-        */
+
+        JSONObject obj = new JSONObject();
+        JSONArray list = new JSONArray();
+        try {
+            obj.put("device", name);
+            list.put(band.amplitudes[0]);
+            list.put(band.amplitudes[1]);
+            list.put(band.amplitudes[2]);
+            list.put(band.amplitudes[3]);
+            obj.put("decibel", list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("Result", obj.toString());
+        try {
+            FileWriter file = new FileWriter(DEVICE_DATA, true);
+            file.write(obj.toString());
+            file.write("\n");
+            file.flush();
+            file.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         return true;
     }
