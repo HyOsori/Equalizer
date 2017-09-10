@@ -14,8 +14,8 @@ public class SetterPresenter implements Presenter {
 
     private SetterView view;
     private Eq model;
-    private BandSet base;
-    private BandSet target;
+//    private BandSet base;
+//    private BandSet target;
     ArrayList<DeviceInfo> earphoneInfoList = new ArrayList<DeviceInfo>();
     private Equalizer mEqualizer;
 
@@ -68,11 +68,12 @@ public class SetterPresenter implements Presenter {
 
     }
 
-    public void onApplyBtnSelected(String baseName, String targetName) {
-        this.base = new BandSet(baseName);
-        this.target = new BandSet(targetName);
+    public void onApplyBtnSelected(int baseNum, int targetNum) {
+//        this.base = new BandSet(baseName);
+//        this.target = new BandSet(targetName);
+        model.ApplyEq(baseNum, targetNum, earphoneInfoList, mEqualizer);
+        this.view.setSeekBars(model.PresentEq(mEqualizer));
 
-        this.view.setSeekBars(this.target.getBandSet());
     }
 
     public void onSeekBarChanged(int frequency, int amplitude) {

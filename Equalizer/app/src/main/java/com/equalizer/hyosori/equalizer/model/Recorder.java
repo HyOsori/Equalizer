@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -365,22 +368,35 @@ public class Recorder extends AppCompatActivity{
 
         JSONObject obj = new JSONObject();
         JSONArray list = new JSONArray();
+        JSONObject resultJson = new JSONObject();
+        ReadData rd_ = new ReadData();
         try {
-            obj.put("device", name);
-            list.put(band.amplitudes[0]);
-            list.put(band.amplitudes[1]);
-            list.put(band.amplitudes[2]);
-            list.put(band.amplitudes[3]);
-            obj.put("decibel", list);
+            list = rd_.GetJsonData();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.d("Result", obj.toString());
+        Log.d("Result1", list.toString());
         try {
-            FileWriter file = new FileWriter(DEVICE_DATA, true);
-            file.write(obj.toString());
-            file.write("\n");
+            obj.put("model", name);
+            obj.put("freq1_mean" ,band.amplitudes[0]);
+            obj.put("freq2_mean" ,band.amplitudes[1]);
+            obj.put("freq3_mean" ,band.amplitudes[2]);
+            obj.put("freq4_mean" ,band.amplitudes[3]);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        list.put(obj);
+
+        try {
+            resultJson.put("earphone", list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("Result", resultJson.toString());
+        try {
+            FileWriter file = new FileWriter(DEVICE_DATA, false);
+            file.write(resultJson.toString());
+//            file.write("\n");
             file.flush();
             file.close();
 
