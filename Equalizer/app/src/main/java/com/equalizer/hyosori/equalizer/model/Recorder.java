@@ -6,7 +6,6 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.media.audiofx.Equalizer;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -151,18 +150,8 @@ public class Recorder extends AppCompatActivity{
         }
 
         recorder = new MediaRecorder();
-<<<<<<< HEAD
-        String manufacturer = Build.MANUFACTURER;
-        if (manufacturer.toLowerCase().contains("samsung")) {
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
-        } else {
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-        }
-//        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-=======
 
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION);
->>>>>>> 9b9dde49fa2398005844f7161b62b7ad216266d4
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setOutputFile(RECORDED_FILE);
@@ -403,4 +392,3 @@ public class Recorder extends AppCompatActivity{
         return true;
     }
 }
-
