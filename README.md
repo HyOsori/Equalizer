@@ -3,6 +3,7 @@ Equalizer
 Equalizing music by analyzing input frequency
 
 
+
 ## Parts
 
 * Eq : Folder For EQ Setting
