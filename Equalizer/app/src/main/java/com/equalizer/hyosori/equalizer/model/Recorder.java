@@ -392,4 +392,3 @@ public class Recorder extends AppCompatActivity{
         return true;
     }
 }
-
