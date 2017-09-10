@@ -2,9 +2,5 @@
 <resources>
     <string-array name="preset">
         <item>preset1</item>
-        <item>preset2</item>
-        <item>preset3</item>
-        <item>preset4</item>
-        <item>preset5</item>
     </string-array>
 </resources>

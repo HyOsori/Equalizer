@@ -1,6 +1,7 @@
 package com.equalizer.hyosori.equalizer.view;
 
 import android.content.Intent;
+import android.media.audiofx.Equalizer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.equalizer.hyosori.equalizer.R;
 import com.equalizer.hyosori.equalizer.presenter.SetterPresenter;
+
+import java.util.ArrayList;
 
 
 public class SetterActivity extends AppCompatActivity implements SetterView {
@@ -48,6 +52,8 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
 
         setSupportActionBar(toolbar);
 
+//        arraylist = new ArrayAdapter<String>();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, baseSpinner, arraylist);
         baseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -133,6 +139,8 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
                 onSeekBarProgressChanged(seekBar);
             }
         });
+
+
     }
 
     @Override
@@ -195,9 +203,19 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         enabledSeekBars();
         presenter.onApplyBtnSelected(baseName, targetName);
     }
+    @Override
+    public void setSpinnerData(ArrayList<String> eil_) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, eil_);
+        this.baseSpinner.setAdapter(adapter);
+        this.targetSpinner.setAdapter(adapter);
+    }
 
     @Override
     public void setSeekBars(int[] amplitudes) {
         //preset대로 seekbar를 조절합니다
+        seekBar60.setProgress(amplitudes[0] + 1500);
+        seekBar230.setProgress(amplitudes[1] + 1500);
+        seekBar910.setProgress(amplitudes[2] + 1500);
+        seekBar3600.setProgress(amplitudes[3] + 1500);
     }
 }
