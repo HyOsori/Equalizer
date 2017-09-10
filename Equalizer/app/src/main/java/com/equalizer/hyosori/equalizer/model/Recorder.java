@@ -144,7 +144,7 @@ public class Recorder extends AppCompatActivity{
     public boolean record(int frequency) {
         //int amplitude = 0;
         if(recorder != null) {
-            recorder.stop();
+//            recorder.stop();
             recorder.release();
             recorder = null;
         }
