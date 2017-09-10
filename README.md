@@ -30,7 +30,7 @@ Equalizing music by analyzing input frequency
 
 [sjnov11](https://github.com/sjnov11 "" ),
 [Hanyelin](https://github.com/Hanyelin "" ),
-[JihunJo](https://github.com/JojihunCho "" ),
+[JihunJo](https://github.com/JojihunCho "" )
 
 
 ### IDE
