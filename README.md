@@ -15,7 +15,7 @@ Equalizing music by analyzing input frequency
 
 **Eq**
 
-[doomsheart](https://github.com/doomsheart "" ),
+[Joonho Wohn](https://github.com/doomsheart "" ),
 [KimJangHyeon](https://github.com/KimJangHyeon "" ),
 [JunwonP](https://github.com/JunwonP "" ),
 [JiHyeonSEO](https://github.com/JiHyeonSEO "" )
@@ -23,13 +23,13 @@ Equalizing music by analyzing input frequency
 **UX_UI**
 
 [kimjieun02](https://github.com/kimjieun02 "" ), 
-[kjh32790](https://github.com/kjh32790 "" )
+[Jihong](https://github.com/kjh32790 "" )
 
 **GET**
 
 [sjnov11](https://github.com/sjnov11 "" ),
 [Hanyelin](https://github.com/Hanyelin "" ),
-[JojihunCho](https://github.com/JojihunCho "" ),
+[JihunJo](https://github.com/JojihunCho "" ),
 
 
 ### IDE
