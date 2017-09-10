@@ -27,7 +27,15 @@ public class Eq {
         targetList[1] = deviceInfos.get(targetModelNum).freq2_mean;
         targetList[2] = deviceInfos.get(targetModelNum).freq3_mean;
         targetList[3] = deviceInfos.get(targetModelNum).freq4_mean;
-
+        //zero check
+        for (int i = 0; i < 4; i++) {
+            if (baseList[i] == 0) {
+                baseList[i] = 1;
+            }
+            if (targetList[i] == 0) {
+                targetList[i] = 1;
+            }
+        }
         int min = baseList[0];
         int min_i = 0;
         for (int i = 0; i < 4; i++) {
@@ -36,6 +44,7 @@ public class Eq {
                 min = baseList[i];
             }
         }
+
         int basePivot = baseList[min_i];
         int targetPivot = targetList[min_i];
         int[] calculList = new int[4];
