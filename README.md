@@ -10,6 +10,17 @@ Equalizing music by analyzing input frequency
 
 * GET : Foler For Get Setting
 
+## Contributor
+
+**Eq**
+
+
+**UX_UI**
+
+
+**GET**
+
+
 ### IDE
 Android Studio 2.3
 
