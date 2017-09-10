@@ -84,7 +84,7 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
 
         presenter.onCreate();
 
-        seekBar60.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+         seekBar60.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
@@ -198,10 +198,10 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
     }
 
     public void onApplyBtnClicked(View v) {
-        String baseName = this.baseSpinner.getSelectedItem().toString();
-        String targetName = this.targetSpinner.getSelectedItem().toString();
+        int baseNum = this.baseSpinner.getSelectedItemPosition();
+        int targetNum = this.targetSpinner.getSelectedItemPosition();
         enabledSeekBars();
-        presenter.onApplyBtnSelected(baseName, targetName);
+        presenter.onApplyBtnSelected(baseNum, targetNum);
     }
     @Override
     public void setSpinnerData(ArrayList<String> eil_) {
