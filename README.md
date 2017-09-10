@@ -8,7 +8,7 @@ Equalizing music by analyzing input frequency
 
 * Equalize : set input value and recieve data from GET
 
-* UX_UI : design user interface
+* UX_UI : design user interface by using MVP pattern
 
 * GET : measure size of sound and save
 
