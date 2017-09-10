@@ -144,7 +144,7 @@ public class Recorder extends AppCompatActivity{
     public boolean record(int frequency) {
         int amplitude = 0;
         if(recorder != null) {
-            recorder.stop();
+//            recorder.stop();
             recorder.release();
             recorder = null;
         }
@@ -322,7 +322,7 @@ public class Recorder extends AppCompatActivity{
                 @Override
                 public void run() {
 
-                    return average;
+                    //return average;
                 }
             };
 /*
