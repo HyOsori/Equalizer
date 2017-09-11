@@ -58,4 +58,7 @@ public class Eq {
             mEqualizer.setBandLevel((short) i, (short) calculList[i]);
         }
     }
+    public void changeFreq(int band, int amp, Equalizer mEqualizer){
+        mEqualizer.setBandLevel((short) band, (short) amp);
+    }
 }

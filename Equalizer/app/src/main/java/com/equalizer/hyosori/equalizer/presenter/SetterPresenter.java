@@ -77,6 +77,21 @@ public class SetterPresenter implements Presenter {
     }
 
     public void onSeekBarChanged(int frequency, int amplitude) {
-
+        int bandNo = 0;
+        switch (frequency) {
+            case 60 :
+                bandNo = 0;
+                break;
+            case 230 :
+                bandNo = 1;
+                break;
+            case 910 :
+                bandNo = 2;
+                break;
+            case 3600 :
+                bandNo = 3;
+                break;
+        }
+        model.changeFreq(bandNo, amplitude - 1500, mEqualizer);
     }
 }
