@@ -6,11 +6,11 @@ By recording in smartphone mic and analyzing the amplitude of earphone, this pro
 
 ## Parts
 
-* SET : set input value by calculating recieve data from GET
+* Equalize : set input value and recieve data from GET
 
-* UX_UI : design user interface and build framework using MVP pattern
+* UX_UI : design user interface by using MVP pattern
 
-* GET : measure size of sound and give data to SET
+* GET : measure size of sound and save
 
 ## Contributor
 
