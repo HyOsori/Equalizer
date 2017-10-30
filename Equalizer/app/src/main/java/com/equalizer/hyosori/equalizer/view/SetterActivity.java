@@ -1,5 +1,6 @@
 package com.equalizer.hyosori.equalizer.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.audiofx.Equalizer;
 import android.support.constraint.ConstraintLayout;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.equalizer.hyosori.equalizer.R;
 import com.equalizer.hyosori.equalizer.presenter.SetterPresenter;
@@ -39,6 +41,8 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setter);
+
+        Toast.makeText(getApplicationContext(), "onCreate!", Toast.LENGTH_SHORT).show();
 
         detailSettingLayout = (ConstraintLayout) findViewById(R.id.detailSettingLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -162,6 +166,21 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1){
+            if (resultCode == Activity.RESULT_OK){
+                Toast.makeText(getApplicationContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                this.finish();
+                startActivity(getIntent());
+            } else {
+                Toast.makeText(getApplicationContext(), "CANCELED", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -176,7 +195,7 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         int id = item.getItemId();
 
         if (id == R.id.action_new) {
-            startActivity(new Intent(SetterActivity.this, GetterActivity.class));
+            startActivityForResult(new Intent(SetterActivity.this, GetterActivity.class), 1);
             return true;
         }
 
