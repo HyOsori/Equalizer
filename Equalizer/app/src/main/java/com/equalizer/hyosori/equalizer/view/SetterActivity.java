@@ -42,8 +42,6 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setter);
 
-        Toast.makeText(getApplicationContext(), "onCreate!", Toast.LENGTH_SHORT).show();
-
         detailSettingLayout = (ConstraintLayout) findViewById(R.id.detailSettingLayout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         baseSpinner = (Spinner) findViewById(R.id.spinner1);
