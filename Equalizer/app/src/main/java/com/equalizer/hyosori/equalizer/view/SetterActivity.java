@@ -217,6 +217,12 @@ public class SetterActivity extends AppCompatActivity implements SetterView {
     public void onApplyBtnClicked(View v) {
         int baseNum = this.baseSpinner.getSelectedItemPosition();
         int targetNum = this.targetSpinner.getSelectedItemPosition();
+
+        if (baseNum == -1 || targetNum == -1) {
+            Toast.makeText(getApplicationContext(), "NO PRESET", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         enabledSeekBars();
         presenter.onApplyBtnSelected(baseNum, targetNum);
     }
