@@ -1,6 +1,7 @@
 package com.equalizer.hyosori.equalizer.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
@@ -140,6 +141,7 @@ public class GetterActivity extends Activity implements View.OnClickListener, Ge
             public void onClick(View view) {
                 String name = editText.getText().toString();
                 if (presenter.onSaveBtnClicked(name)) {
+                    setResult(RESULT_OK);
                     finish();
                 }
             }
